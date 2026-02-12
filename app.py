@@ -111,6 +111,28 @@ def delete_task(id):
     conn.commit()
     conn.close()
     return redirect("/")
+@app.route("/add", methods=["POST"])
+def add_task():
+    title = request.form["title"]
+    assignee = request.form["assignee"]
+    due_date = request.form["due_date"]
+
+    if not title.strip():
+        return redirect("/")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO tasks (transcript_id, title, assignee, due_date)
+        VALUES (?, ?, ?, ?)
+    """, (None, title, assignee, due_date))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/")
+
 @app.route("/status")
 def status():
     db_status = "OK"
