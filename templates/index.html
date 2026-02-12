@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meeting Action Items Tracker</title>
+</head>
+<body>
+    <h1>Meeting Action Items Tracker</h1>
+    <h2>Paste Meeting Transcript</h2>
+
+<form action="/process_transcript" method="POST">
+    <textarea name="transcript" rows="6" cols="60" placeholder="Paste meeting transcript here..." required></textarea>
+    <br><br>
+    <button type="submit">Process Transcript</button>
+</form>
+
+<hr>
+
+    <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Task Title" required>
+        <input type="text" name="assignee" placeholder="Assigned To" required>
+        <input type="date" name="due_date" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Task List</h2>
+    <h3>Filter Tasks</h3>
+    <a href="/">All</a> |
+    <a href="/?status=Pending">Open</a> |
+    <a href="/?status=Completed">Completed</a>
+    <br><br>
+
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>Assignee</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task[1] }}</td>
+            <td>{{ task[2] }}</td>
+            <td>{{ task[3] }}</td>
+            <td>{{ task[4] }}</td>
+            <td>
+    {% if task[4] == "Pending" %}
+        <a href="/complete/{{ task[0] }}">Complete</a>
+    {% endif %}
+    |
+    <a href="/delete/{{ task[0] }}">Delete</a>
+</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+    <hr>
+<h2>Last 5 Transcripts</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Content</th>
+        <th>Created At</th>
+    </tr>
+
+    {% for t in transcripts %}
+    <tr>
+        <td>{{ t[0] }}</td>
+        <td>{{ t[1] }}</td>
+        <td>{{ t[2] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
